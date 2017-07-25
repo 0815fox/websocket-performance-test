@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+  <meta charset="utf-8" />
+  <title>WebSocket Test</title>
+  <script language="javascript" type="text/javascript">
+
+  let wsUri = "ws://localhost:9090/";
+  let output;
+
+  let i = 1;
+  let Times = [];
+
+  let TimeSum = 0;
+  let Count = 0;
+
+  const MessagesPerInterval = 100;
+  let Intervals = 100;
+
+  console.log('Sending',Intervals,'times',MessagesPerInterval,'messgages each.');
+
+  function init()
+  {
+    output = document.getElementById("output");
+    testWebSocket();
+  }
+
+  function testWebSocket()
+  {
+    websocket = new WebSocket(wsUri);
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+  }
+
+  function run() {
+    const Interval = setInterval(() => {
+      for (let i = 0; i < MessagesPerInterval; ++i) doSend();
+      Intervals -= 1;
+      if (Intervals === 0) {
+        clearInterval(Interval);
+        websocket.close();
+      }
+    }, 1);
+  }
+
+  function onOpen(evt)
+  {
+    console.log("CONNECTED");
+    run();
+  }
+
+  function onClose(evt)
+  {
+    console.log("DISCONNECTED");
+    console.log(Count, 'messages, average response time:', TimeSum / Count);
+  }
+
+
+  function onMessage(evt)
+  {
+    const i = evt.data;
+    const Time = performance.now() - Times[i];
+    TimeSum += Time;
+    Count += 1;
+    delete Times[i];
+    console.log(i + ' after ' + Time + 'ms');
+  }
+
+  function onError(evt)
+  {
+    console.error(evt.data);
+  }
+
+  function doSend()
+  {
+    console.log("SENT: " + i);
+    websocket.send(i);
+    Times[i.toString()] = performance.now();
+    i += 1;
+  }
+
+  window.addEventListener("load", init, false);
+
+  </script>
+
+  <h2>WebSocket Test</h2>
+
+  <div id="output"></div>

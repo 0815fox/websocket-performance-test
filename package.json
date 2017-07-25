@@ -1,0 +1,19 @@
+{
+  "name": "websocket-test",
+  "version": "0.0.1",
+  "description": "Tests websocket speed",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "mk",
+  "license": "ISC",
+  "optionalDependencies": {
+    "bufferutil": "^3.0.2",
+    "utf-8-validate": "^3.0.3"
+  },
+  "dependencies": {
+    "performance-now": "^2.1.0"
+  }
+}
