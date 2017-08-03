@@ -12,7 +12,7 @@ wss.on('connection', function connection(ws) {
 			const Duration = now() - StartTime;
 			TimeSum += Duration;
 			Count += 1;
-			console.log(message,Duration+'ms');
+			// console.log(message,Duration+'ms');
 		});
 	});
 	ws.on('close',()=>{
